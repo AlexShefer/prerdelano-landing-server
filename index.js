@@ -1,6 +1,7 @@
 import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
+import cors from "cors";
 import Event from "./models/event.js";
 dotenv.config();
 
@@ -12,6 +13,10 @@ mongoose
     .connect(process.env.DATABASE)
     .then(() => console.log("the database is connected"))
     .catch((err) => console.log(err));
+
+// middleware
+
+app.use(cors());
 
 app.get("/api/events", async (req, res) => {
     try {
