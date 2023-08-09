@@ -13,21 +13,17 @@ mongoose
     .catch((err) => console.log(err));
 
 // middleware
-// Allow requests from specific origins (replace with your Netlify domain)
-const allowedOrigins = ["https://peredelano.netlify.app"];
 
 app.use((req, res, next) => {
-    const origin = req.headers.origin;
-
-    if (allowedOrigins.includes(origin)) {
-        res.setHeader("Access-Control-Allow-Origin", origin);
-    }
-
-    res.header(
+    res.setHeader(
+        "Access-Control-Allow-Origin",
+        "https://peredelano.netlify.app"
+    ); // Replace with your frontend domain
+    res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
+    res.setHeader(
         "Access-Control-Allow-Headers",
         "Origin, X-Requested-With, Content-Type, Accept"
     );
-
     next();
 });
 
