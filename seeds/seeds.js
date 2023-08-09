@@ -1,10 +1,18 @@
 import express from "express";
 import mongoose from "mongoose";
-import dotenv from "dotenv";
+import "dotenv/config";
 import { events } from "./data.js";
+import { convertRussianDate, filterEvents } from "./helper.js";
 import Event from "../models/event.js";
 
-dotenv.config();
+const refractedEvents = events.map((event) => {
+    return {
+        ...event,
+        date: convertRussianDate(event.date),
+    };
+});
+
+const filteredEvents = filterEvents(refractedEvents);
 
 mongoose
     .connect(process.env.DATABASE)
@@ -22,7 +30,7 @@ async function seedDatabase() {
         await Event.deleteMany({});
 
         // Insert the new data
-        await Event.insertMany(events);
+        await Event.insertMany(filteredEvents);
 
         console.log("Database seeded successfully!");
     } catch (error) {
