@@ -1,9 +1,7 @@
 import express from "express";
 import mongoose from "mongoose";
-import dotenv from "dotenv";
-import cors from "cors";
+import "dotenv/config";
 import Event from "./models/event.js";
-dotenv.config();
 
 const app = express();
 
@@ -15,8 +13,23 @@ mongoose
     .catch((err) => console.log(err));
 
 // middleware
+// Allow requests from specific origins (replace with your Netlify domain)
+const allowedOrigins = ["https://peredelano.netlify.app"];
 
-app.use(cors());
+app.use((req, res, next) => {
+    const origin = req.headers.origin;
+
+    if (allowedOrigins.includes(origin)) {
+        res.setHeader("Access-Control-Allow-Origin", origin);
+    }
+
+    res.header(
+        "Access-Control-Allow-Headers",
+        "Origin, X-Requested-With, Content-Type, Accept"
+    );
+
+    next();
+});
 
 app.get("/api/events", async (req, res) => {
     try {
